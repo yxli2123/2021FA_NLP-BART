@@ -1,0 +1,13 @@
+python main.py \
+--mode train \
+--expt_dir /data1/yixiao/ \
+--expt_name CNN \
+--run_name bs_1_test \
+--model bart \
+--seq_len 1024 \
+--dataset multi_nli \
+--seed 888 \
+--lr 1e-5 \
+--epochs 10 \
+--batch_size 1 \
+--gpu_id 0
