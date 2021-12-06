@@ -17,6 +17,9 @@ class BaseDataset(Dataset):
     def get_tokenizer(self):
         return self.tokenizer
 
+    def __len__(self):
+        return len(self.data)
+
     def __getitem__(self, idx):
         record = self.data[idx]
         if self.dataset_name == 'multi_nli':
@@ -30,7 +33,7 @@ class BaseDataset(Dataset):
             input_token_ids = torch.tensor(input_encoded['input_ids'])
             input_attn_mask = torch.tensor(input_encoded['attention_mask'])
 
-            sample = {'input_text': record['text'],
+            sample = {#'input_text': record['text'],
                       'input_token_ids': input_token_ids,
                       'input_attn_mask': input_attn_mask,
                       'label': record['label']}
@@ -70,9 +73,9 @@ class BaseDataset(Dataset):
         if self.dataset_name == 'multi_nli':
             dataset = load_dataset("multi_nli")
             split = 'train' if self.split == 'train' else 'validation_matched'
-            data = dataset['data'][split]
+            data = dataset[split]
             for row in data:
-                self.data.append({'text': f"{row['permise']}\n{row['hypothesis']}",
+                self.data.append({'text': f"{row['premise']}\n{row['hypothesis']}",
                                   'label': int(row['label'])})
 
         elif self.dataset_name == 'cnn_dailymail':

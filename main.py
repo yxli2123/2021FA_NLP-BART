@@ -35,12 +35,11 @@ def config():
     parser.add_argument('--batch_size',         type=int,       default=8)
     parser.add_argument('--acc_step',           type=int,       default=1)
     parser.add_argument('--valid_interval',     type=int,       default=1000)
-    parser.add_argument('--save_interval',      type=int,       default=3000)
+    parser.add_argument('--ckpt_interval',      type=int,       default=3000)
 
     # GPU params
     parser.add_argument('--gpu_id',             type=int,       default=0)
-    parser.add_argument('--data_parallel',      type=str,       default='True')
-
+    parser.add_argument('--cpu',                type=str,       default='False')
     # Misc params
     parser.add_argument('--num_workers',        type=int,       default=1)
 
@@ -54,8 +53,8 @@ def main():
 
     # Environment
     set_random_seed(args.seed)
-    device = torch.device('cpu') if args.cpu else torch.device(f'cuda:{args.gpu_id}')
-
+    # device = torch.device('cpu') if args.cpu else torch.device(f'cuda:{args.gpu_id}')
+    device = torch.device(f'cuda:{args.gpu_id}')
     # Log
     log_dir = os.path.join(args.expt_dir, args.expt_name, args.run_name)
     if not os.path.exists(log_dir):
@@ -65,10 +64,10 @@ def main():
     # Task
     task = 'cls' if args.dataset == 'multi_nli' else 'seq2seq'
 
-    if args.split == 'train':
+    if args.mode == 'train':
         # Load dataset
-        train_dataset = BaseDataset(args.dataset, args.model, args.split, 'train')
-        valid_dataset = BaseDataset(args.dataset, args.model, args.split, 'valid')
+        train_dataset = BaseDataset(args.dataset, args.model, args.seq_len, 'train')
+        valid_dataset = BaseDataset(args.dataset, args.model, args.seq_len, 'valid')
         train_loader = DataLoader(train_dataset, batch_size=args.batch_size,
                                   num_workers=args.num_workers, shuffle=True, drop_last=True)
         valid_loader = DataLoader(valid_dataset, batch_size=args.batch_size,
