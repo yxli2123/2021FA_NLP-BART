@@ -23,17 +23,18 @@ class BaseDataset(Dataset):
     def __getitem__(self, idx):
         record = self.data[idx]
         if self.dataset_name == 'multi_nli':
-            input_encoded = self.tokenizer.encode_plus(text=record['text'],
-                                                       add_special_tokens=False,
-                                                       padding='max_length',
-                                                       max_length=self.seq_len,
-                                                       truncation=True,
-                                                       return_attention_mask=True)
+            input_encoded = self.tokenizer(text=record['text'],
+                                           add_special_tokens=False,
+                                           padding='max_length',
+                                           max_length=self.seq_len,
+                                           truncation=True,
+                                           return_attention_mask=True)
 
             input_token_ids = torch.tensor(input_encoded['input_ids'])
             input_attn_mask = torch.tensor(input_encoded['attention_mask'])
 
-            sample = {'input_token_ids': input_token_ids,
+            sample = {'input_text': record['text'],
+                      'input_token_ids': input_token_ids,
                       'input_attn_mask': input_attn_mask,
                       'label': record['label']}
 
@@ -53,10 +54,14 @@ class BaseDataset(Dataset):
 
             input_token_ids = torch.tensor(input_encoded['input_ids'])
             input_attn_mask = torch.tensor(input_encoded['attention_mask'])
+
             target_token_ids = torch.tensor(target_encoded['input_ids'])
+            target_attn_mask = torch.tensor(target_encoded['attention_mask'])
 
             # Output
-            sample = {'input_token_ids': input_token_ids,
+            sample = {'input_text': record['text'],
+                      'label_text': record['label'],
+                      'input_token_ids': input_token_ids,
                       'input_attn_mask': input_attn_mask,
                       'label': target_token_ids}
         else:
@@ -89,3 +94,4 @@ class BaseDataset(Dataset):
 if __name__ == '__main__':
     dataset_ = load_dataset("cnn_dailymail", "3.0.0")
     print("Done!")
+

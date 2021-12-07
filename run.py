@@ -7,6 +7,7 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 from nltk.translate.bleu_score import sentence_bleu
 from sklearn.metrics import accuracy_score
+import random
 from tools import *
 
 
@@ -26,7 +27,7 @@ def train(model: Module,                    # model
             curr_step += 1
 
             # Move data to GPUs
-            batch = {k: v.to(device) for k, v in batch.items()}
+            batch = {k: v.to(device) if torch.is_tensor(v) else v for k, v in batch.items()}
 
             # Forward pass
             model.train()
@@ -86,6 +87,7 @@ def test(model: Module,                    # model
          device,                           # the first device of GPU(s)
          args: dict
          ) -> dict:
+
     input_text = []
     label_pr = []
     label_gt = []
@@ -94,10 +96,10 @@ def test(model: Module,                    # model
     model.eval()
     for batch in tqdm(dataloader):
         # Move data to GPU/CPU
-        batch = {k: v.to(device) for k, v in batch.items()}
+        batch = {k: v.to(device) if torch.is_tensor(v) else v for k, v in batch.items()}
 
         # Log input text
-        input_text += [tokenizer.decode(tokens, skip_special_tokens=True) for tokens in batch['input_token_ids']]
+        input_text += batch['input_text']
 
         # Predict labels
         outputs = model(input_ids=batch['input_token_ids'],
@@ -113,7 +115,7 @@ def test(model: Module,                    # model
         elif args['task_name'] == 'seq2seq':
             label_token_ids = model.generate(batch['input_token_ids'])
             label_pr += [tokenizer.decode(tokens, skip_special_tokens=True) for tokens in label_token_ids]
-            label_gt += [tokenizer.decode(tokens, skip_special_tokens=True) for tokens in batch['label']]
+            label_gt += batch['label_text']
 
         else:
             raise KeyError("expected args['task_name'] is cls or seq2seq, but got other")
@@ -129,3 +131,4 @@ def test(model: Module,                    # model
             'label': label_gt,
             'loss': torch.tensor(loss).mean().item(),
             'metric': metrics}
+

@@ -66,8 +66,8 @@ def main():
 
     if args.mode == 'train':
         # Load dataset
-        train_dataset = BaseDataset(args.dataset, args.model, args.seq_len, 'train')
-        valid_dataset = BaseDataset(args.dataset, args.model, args.seq_len, 'valid')
+        train_dataset = BaseDataset(args.dataset, args.model, 'train', args.seq_len)
+        valid_dataset = BaseDataset(args.dataset, args.model, 'valid', args.seq_len)
         train_loader = DataLoader(train_dataset, batch_size=args.batch_size,
                                   num_workers=args.num_workers, shuffle=True, drop_last=True)
         valid_loader = DataLoader(valid_dataset, batch_size=args.batch_size,
@@ -116,3 +116,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
