@@ -27,7 +27,7 @@ def train(model: Module,                    # model
             curr_step += 1
 
             # Move data to GPUs
-            batch = {k: v.to(device) if not 'text' in k else v for k, v in batch.items()}
+            batch = {k: v.to(device) if torch.is_tensor(v) else v for k, v in batch.items()}
 
             # Forward pass
             model.train()
@@ -96,7 +96,7 @@ def test(model: Module,                    # model
     model.eval()
     for batch in tqdm(dataloader):
         # Move data to GPU/CPU
-        batch = {k: v.to(device) if not 'text' in k else v for k, v in batch.items()}
+        batch = {k: v.to(device) if torch.is_tensor(v) else v for k, v in batch.items()}
 
         # Log input text
         input_text += batch['input_text']

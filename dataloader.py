@@ -33,7 +33,7 @@ class BaseDataset(Dataset):
             input_token_ids = torch.tensor(input_encoded['input_ids'])
             input_attn_mask = torch.tensor(input_encoded['attention_mask'])
 
-            sample = {#'input_text': record['text'],
+            sample = {'input_text': record['text'],
                       'input_token_ids': input_token_ids,
                       'input_attn_mask': input_attn_mask,
                       'label': record['label']}
