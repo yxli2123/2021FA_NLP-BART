@@ -11,7 +11,7 @@ class BaseDataset(Dataset):
         self.seq_len = seq_len
         self.split = split
 
-        self.data = []
+        self.data = None
         self.preprocess_dataset()
 
     def get_tokenizer(self):
@@ -33,8 +33,7 @@ class BaseDataset(Dataset):
             input_token_ids = torch.tensor(input_encoded['input_ids'])
             input_attn_mask = torch.tensor(input_encoded['attention_mask'])
 
-            sample = {#'input_text': record['text'],
-                      'input_token_ids': input_token_ids,
+            sample = {'input_token_ids': input_token_ids,
                       'input_attn_mask': input_attn_mask,
                       'label': record['label']}
 
@@ -54,14 +53,10 @@ class BaseDataset(Dataset):
 
             input_token_ids = torch.tensor(input_encoded['input_ids'])
             input_attn_mask = torch.tensor(input_encoded['attention_mask'])
-
             target_token_ids = torch.tensor(target_encoded['input_ids'])
-            target_attn_mask = torch.tensor(target_encoded['attention_mask'])
 
             # Output
-            sample = {'input_text': record['text'],
-                      'label_text': record['label'],
-                      'input_token_ids': input_token_ids,
+            sample = {'input_token_ids': input_token_ids,
                       'input_attn_mask': input_attn_mask,
                       'label': target_token_ids}
         else:
@@ -70,6 +65,7 @@ class BaseDataset(Dataset):
         return sample
 
     def preprocess_dataset(self):
+        self.data = []
         if self.dataset_name == 'multi_nli':
             dataset = load_dataset("multi_nli")
             split = 'train' if self.split == 'train' else 'validation_matched'

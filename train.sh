@@ -4,7 +4,7 @@ python main.py \
 --expt_name CNN \
 --run_name bs_1_test \
 --model facebook/bart-base \
---seq_len 1024 \
+--seq_len 256 \
 --dataset multi_nli \
 --seed 888 \
 --lr 1e-5 \
