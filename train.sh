@@ -3,7 +3,7 @@ python main.py \
 --expt_dir /data1/yixiao/ \
 --expt_name CNN \
 --run_name bs_1_test \
---model facebook/bart-base \
+--model roberta-large \
 --seq_len 256 \
 --dataset multi_nli \
 --seed 888 \
