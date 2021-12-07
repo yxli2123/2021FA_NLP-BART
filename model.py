@@ -15,6 +15,9 @@ def get_model(model_name: str, task_name: str):
         model.config.num_labels = 3
         return model
 
+        model.config.num_labels = 3
+        return model
+
     elif task_name == 'seq2seq':
         if 'bart' in model_name:
             return BartForConditionalGeneration.from_pretrained(model_name)
