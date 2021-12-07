@@ -23,12 +23,12 @@ class BaseDataset(Dataset):
     def __getitem__(self, idx):
         record = self.data[idx]
         if self.dataset_name == 'multi_nli':
-            input_encoded = self.tokenizer(text=record['text'],
-                                           add_special_tokens=False,
-                                           padding='max_length',
-                                           max_length=self.seq_len,
-                                           truncation=True,
-                                           return_attention_mask=True)
+            input_encoded = self.tokenizer.encode_plus(text=record['text'],
+                                                       add_special_tokens=False,
+                                                       padding='max_length',
+                                                       max_length=self.seq_len,
+                                                       truncation=True,
+                                                       return_attention_mask=True)
 
             input_token_ids = torch.tensor(input_encoded['input_ids'])
             input_attn_mask = torch.tensor(input_encoded['attention_mask'])
