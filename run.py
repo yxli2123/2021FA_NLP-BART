@@ -52,7 +52,7 @@ def train(model: Module,                    # model
 
             # Validate
             if curr_step % args['valid_interval'] == 0 and valid_dataloader.__len__():
-                metrics = test(model, valid_dataloader, tokenizer, device)
+                metrics = test(model, valid_dataloader, tokenizer, device, args)
                 sample_number = random.randint(0, valid_dataloader.__len__() - 1)
                 add_to_writer(metrics, writer, curr_step, sample_number)
 
@@ -66,7 +66,7 @@ def train(model: Module,                    # model
                 torch.save(state_dict, path)
 
         # Validate every epoch
-        metrics = test(model, valid_dataloader, tokenizer, device)
+        metrics = test(model, valid_dataloader, tokenizer, device, args)
         sample_number = random.randint(0, valid_dataloader.__len__() - 1)
         add_to_writer(metrics, writer, curr_step, sample_number)
 

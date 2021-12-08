@@ -1,5 +1,5 @@
 from transformers import BartForConditionalGeneration, T5ForConditionalGeneration
-from transformers import BartForSequenceClassification, BertForSequenceClassification, RobertaForSequenceClassification
+from transformers import BartForSequenceClassification, BertForSequenceClassification, RobertaForSequenceClassification, XLNetForSequenceClassification
 
 
 def get_model(model_name: str, task_name: str):
@@ -10,8 +10,11 @@ def get_model(model_name: str, task_name: str):
             model = RobertaForSequenceClassification.from_pretrained(model_name, num_labels=3)
         elif 'bert' in model_name:
             model = BertForSequenceClassification.from_pretrained(model_name, num_labels=3)
+        elif 'xlnet' in model_name:
+            model = XLNetForSequenceClassification.from_pretrained(model_name, num_labels=3)
         else:
             raise KeyError("expected bart, bert, roberta, but got other")
+        print(model)
         return model
 
     elif task_name == 'seq2seq':

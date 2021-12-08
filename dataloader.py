@@ -23,8 +23,8 @@ class BaseDataset(Dataset):
     def __getitem__(self, idx):
         record = self.data[idx]
         if self.dataset_name == 'multi_nli':
-            input_encoded = self.tokenizer(text=record['text'],
-                                           add_special_tokens=False,
+            input_encoded = self.tokenizer(text='<cls>' + record['text'],
+                                           add_special_tokens=True,
                                            padding='max_length',
                                            max_length=self.seq_len,
                                            truncation=True,
