@@ -11,7 +11,7 @@ class BaseDataset(Dataset):
         self.seq_len = seq_len
         self.split = split
 
-        self.data = []
+        self.data = None
         self.preprocess_dataset()
 
     def get_tokenizer(self):
@@ -70,6 +70,7 @@ class BaseDataset(Dataset):
         return sample
 
     def preprocess_dataset(self):
+        self.data = []
         if self.dataset_name == 'multi_nli':
             dataset = load_dataset("multi_nli")
             split = 'train' if self.split == 'train' else 'validation_matched'

@@ -5,7 +5,9 @@ import random
 
 def add_to_writer(metrics: dict, writer, curr_step: int, sample_number=0):
     writer.add_scalar('Valid/Loss', metrics['loss'], curr_step)
-    writer.add_scalar('Valid/Metric', metrics['metric'], curr_step)
+    writer.add_scalar('Valid/Metrics/R1', metrics['metrics']['r1'], curr_step)
+    writer.add_scalar('Valid/Metrics/R2', metrics['metrics']['r2'], curr_step)
+    writer.add_scalar('Valid/Metrics/RL', metrics['metrics']['rl'], curr_step)
     writer.add_text('Valid/Input_text', str(metrics['input_text'][sample_number]), curr_step)
     writer.add_text('Valid/Label_text', str(metrics['label'][sample_number]), curr_step)
     writer.add_text('Valid/Prediction_text', str(metrics['prediction'][sample_number]), curr_step)

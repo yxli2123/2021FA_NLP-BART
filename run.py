@@ -9,6 +9,7 @@ from nltk.translate.bleu_score import sentence_bleu
 from sklearn.metrics import accuracy_score
 import random
 from tools import *
+from rouge import Rouge
 
 
 def train(model: Module,                    # model
@@ -122,13 +123,22 @@ def test(model: Module,                    # model
 
     # Calculate metrics
     if args['task_name'] == 'cls':
-        metrics = accuracy_score(label_gt, label_pr)
+        acc = 100 * accuracy_score(label_gt, label_pr)
+        r1 = acc
+        r2 = acc
+        rl = acc
     else:
-        metrics = accuracy_score(label_gt, label_pr)
+        rouge = Rouge()
+        metrics = rouge.get_scores(label_gt, label_pr, avg=True)
+        r1 = 100 * metrics['rouge-1']['r']
+        r2 = 100 * metrics['rouge-2']['r']
+        rl = 100 * metrics['rouge-l']['r']
+        acc = (r1 + r2 + rl) / 3
 
     return {'input_text': input_text,
             'prediction': label_pr,
             'label': label_gt,
             'loss': torch.tensor(loss).mean().item(),
-            'metric': metrics}
+            'metric': acc,
+            'metrics': {'r1': r1, 'r2': r2, 'rl': rl}}
 
