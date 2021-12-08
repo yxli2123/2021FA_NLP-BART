@@ -5,17 +5,13 @@ from transformers import BartForSequenceClassification, BertForSequenceClassific
 def get_model(model_name: str, task_name: str):
     if task_name == 'cls':
         if 'bart' in model_name:
-            model = BartForSequenceClassification.from_pretrained(model_name)
+            model = BartForSequenceClassification.from_pretrained(model_name, num_labels=3)
         elif 'roberta' in model_name:
-            model = RobertaForSequenceClassification.from_pretrained(model_name)
+            model = RobertaForSequenceClassification.from_pretrained(model_name, num_labels=3)
         elif 'bert' in model_name:
-            model = BertForSequenceClassification.from_pretrained(model_name)
+            model = BertForSequenceClassification.from_pretrained(model_name, num_labels=3)
         else:
             raise KeyError("expected bart, bert, roberta, but got other")
-        model.config.num_labels = 3
-        return model
-
-        model.config.num_labels = 3
         return model
 
     elif task_name == 'seq2seq':
@@ -28,3 +24,4 @@ def get_model(model_name: str, task_name: str):
 
     else:
         raise KeyError("expected cls, seq2seq, but got other")
+
