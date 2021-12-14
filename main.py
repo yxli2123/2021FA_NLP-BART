@@ -35,7 +35,7 @@ def config():
     parser.add_argument('--batch_size',         type=int,       default=8)
     parser.add_argument('--acc_step',           type=int,       default=1)
     parser.add_argument('--valid_interval',     type=int,       default=1000)
-    parser.add_argument('--ckpt_interval',      type=int,       default=3000)
+    parser.add_argument('--ckpt_interval',      type=int,       default=5000)
 
     # GPU params
     parser.add_argument('--gpu_id',             type=int,       default=0)

@@ -129,12 +129,24 @@ def test(model: Module,                    # model
         rl = acc
     else:
         rouge = Rouge()
-        metrics = rouge.get_scores(label_gt, label_pr, avg=True)
+        # don't allow emypty string when compute ROUGE
+        label_gt_new = []
+        label_pr_new = []
+        for str_gt, str_pr in zip(label_gt, label_pr):
+            if str_gt == "" or str_pr == "":
+                continue
+            else:
+                label_gt_new.append(str_gt)
+                label_pr_new.append(str_pr)
+
+        metrics = rouge.get_scores(label_gt_new, label_pr_new, avg=True)
         r1 = 100 * metrics['rouge-1']['r']
         r2 = 100 * metrics['rouge-2']['r']
         rl = 100 * metrics['rouge-l']['r']
         acc = (r1 + r2 + rl) / 3
-
+    print("r1: ", r1)
+    print("r2: ", r2)
+    print("rl: ", rl)
     return {'input_text': input_text,
             'prediction': label_pr,
             'label': label_gt,

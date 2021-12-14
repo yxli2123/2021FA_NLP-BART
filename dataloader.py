@@ -82,7 +82,7 @@ class BaseDataset(Dataset):
         elif self.dataset_name == 'cnn_dailymail':
             dataset = load_dataset("cnn_dailymail", "3.0.0")
             split = 'train' if self.split == 'train' else 'validation'
-            data = dataset['data'][split]
+            data = dataset[split]
             for row in data:
                 self.data.append({'text': row['article'],
                                   'label': row['highlights']})
