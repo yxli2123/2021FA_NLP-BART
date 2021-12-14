@@ -8,7 +8,7 @@ from tqdm import tqdm
 from nltk.translate.bleu_score import sentence_bleu
 from sklearn.metrics import accuracy_score
 import random
-from tools import *
+from utils import *
 from rouge import Rouge
 
 
